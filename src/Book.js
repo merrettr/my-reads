@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Book = ({ title, author, imageUrl }) =>
+const Book = ({ title, authors, shelf, imageUrl, onMoveShelf }) =>
   <div className="book">
     <div className="book-top">
       <div
@@ -13,7 +13,7 @@ const Book = ({ title, author, imageUrl }) =>
         }}
       />
       <div className="book-shelf-changer">
-        <select>
+        <select value={shelf} onChange={ev => onMoveShelf(ev.target.value)}>
           <option value="none" disabled>
             Move to...
           </option>
@@ -28,14 +28,16 @@ const Book = ({ title, author, imageUrl }) =>
       {title}
     </div>
     <div className="book-authors">
-      {author}
+      <span>{authors.join(', ')}</span>
     </div>
   </div>;
 
 Book.propTypes = {
   title: PropTypes.string.isRequired,
-  author: PropTypes.string.isRequired,
+  authors: PropTypes.arrayOf(PropTypes.string).isRequired,
+  shelf: PropTypes.string.isRequired,
   imageUrl: PropTypes.string.isRequired,
+  onMoveShelf: PropTypes.func.isRequired,
 };
 
 export default Book;
