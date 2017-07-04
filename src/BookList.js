@@ -5,20 +5,12 @@ import Shelf from './Shelf';
 import Book from './Book';
 
 const BookList = ({ books, onMoveBook }) => {
-  const mapBook = book => {
-    const { id, title, shelf, authors, imageLinks: { smallThumbnail } } = book;
-
-    return (
-      <Book
-        key={id}
-        title={title}
-        shelf={shelf}
-        authors={authors}
-        imageUrl={smallThumbnail}
-        onMoveShelf={shelf => onMoveBook(book, shelf)}
-      />
-    );
-  };
+  const renderBook = book =>
+    <Book
+      key={book.id}
+      {...book}
+      onMoveShelf={shelf => onMoveBook(book, shelf)}
+    />;
 
   return (
     <div className="list-books">
@@ -29,13 +21,13 @@ const BookList = ({ books, onMoveBook }) => {
         <Shelf title="Currently Reading">
           {books
             .filter(({ shelf }) => shelf === 'currentlyReading')
-            .map(mapBook)}
+            .map(renderBook)}
         </Shelf>
         <Shelf title="Want to Read">
-          {books.filter(({ shelf }) => shelf === 'wantToRead').map(mapBook)}
+          {books.filter(({ shelf }) => shelf === 'wantToRead').map(renderBook)}
         </Shelf>
         <Shelf title="Read">
-          {books.filter(({ shelf }) => shelf === 'read').map(mapBook)}
+          {books.filter(({ shelf }) => shelf === 'read').map(renderBook)}
         </Shelf>
       </div>
       <div className="open-search">

@@ -43,26 +43,12 @@ class Search extends Component {
   render() {
     const { excludeBooks, onAddBook } = this.props;
 
-    const mapBook = book => {
-      const {
-        id,
-        title,
-        shelf,
-        authors,
-        imageLinks: { smallThumbnail },
-      } = book;
-
-      return (
-        <Book
-          key={id}
-          title={title}
-          shelf={shelf}
-          authors={authors || []}
-          imageUrl={smallThumbnail}
-          onMoveShelf={shelf => onAddBook(book, shelf)}
-        />
-      );
-    };
+    const renderBook = book =>
+      <Book
+        key={book.id}
+        {...book}
+        onMoveShelf={shelf => onAddBook(book, shelf)}
+      />;
 
     return (
       <div className="search-books">
@@ -87,7 +73,7 @@ class Search extends Component {
                   .filter(book => {
                     return !excludeBooks.find(({ id }) => id === book.id);
                   })
-                  .map(mapBook)}
+                  .map(renderBook)}
               </ol>}
         </div>
       </div>

@@ -1,7 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Book = ({ title, authors, shelf, imageUrl, onMoveShelf }) =>
+const Book = ({
+  id,
+  title,
+  shelf,
+  authors = [],
+  imageLinks = {},
+  onMoveShelf,
+}) =>
   <div className="book">
     <div className="book-top">
       <div
@@ -9,7 +16,7 @@ const Book = ({ title, authors, shelf, imageUrl, onMoveShelf }) =>
         style={{
           width: 128,
           height: 193,
-          backgroundImage: `url("${imageUrl}")`,
+          backgroundImage: `url("${imageLinks.smallThumbnail}")`,
         }}
       />
       <div className="book-shelf-changer">
@@ -38,7 +45,9 @@ Book.propTypes = {
   title: PropTypes.string.isRequired,
   authors: PropTypes.arrayOf(PropTypes.string).isRequired,
   shelf: PropTypes.string.isRequired,
-  imageUrl: PropTypes.string.isRequired,
+  imageLinks: PropTypes.shape({
+    smallThumbnail: PropTypes.string.isRequired,
+  }),
   onMoveShelf: PropTypes.func.isRequired,
 };
 
