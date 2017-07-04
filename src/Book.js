@@ -28,7 +28,9 @@ const Book = ({ title, authors, shelf, imageUrl, onMoveShelf }) =>
       {title}
     </div>
     <div className="book-authors">
-      <span>{authors.join(', ')}</span>
+      <span>
+        {authors.join(', ')}
+      </span>
     </div>
   </div>;
 

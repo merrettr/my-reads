@@ -15,18 +15,29 @@ class BooksApp extends React.Component {
   }
 
   moveBook = (book, shelf) => {
-    update(book, shelf).then(() => this.setState(prev => ({
-      books: prev.books.map(b => {
-        if (b.id !== book.id) {
-          return b;
-        }
+    update(book, shelf).then(shelves =>
+      this.setState(prev => {
+        let books = [];
 
-        return {
-          ...book,
-          shelf,
-        };
+        Object.keys(shelves).forEach(shelf =>
+          shelves[shelf].forEach(bookId =>
+            books.push({
+              ...prev.books.find(({ id }) => id === bookId),
+              shelf,
+            })
+          )
+        );
+
+        return { books };
       })
-    })))
+    );
+  };
+
+  addBook = (book, shelf) => {
+    this.setState(prev => ({
+      books: [...prev.books, book],
+    }));
+    update(book, shelf);
   };
 
   render() {
@@ -35,9 +46,15 @@ class BooksApp extends React.Component {
         <Route
           exact
           path="/"
-          render={() => <BookList books={this.state.books} onMoveBook={this.moveBook} />}
+          render={() =>
+            <BookList books={this.state.books} onMoveBook={this.moveBook} />}
         />
-        <Route exact path="/search" component={Search} />
+        <Route
+          exact
+          path="/search"
+          render={() =>
+            <Search excludeBooks={this.state.books} onAddBook={this.addBook} />}
+        />
       </div>
     );
   }
