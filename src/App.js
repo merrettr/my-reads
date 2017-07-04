@@ -35,7 +35,7 @@ class BooksApp extends React.Component {
 
   addBook = (book, shelf) => {
     this.setState(prev => ({
-      books: [...prev.books, book],
+      books: [...prev.books, { ...book, shelf }],
     }));
     update(book, shelf);
   };
