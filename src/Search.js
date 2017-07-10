@@ -36,7 +36,7 @@ class Search extends Component {
     this.setState({ search: searchTerm });
 
     if (searchTerm.trim().length === 0) {
-      this.setState({ books: [] });
+      this.setState({ books: [], isLoading: false });
       return;
     }
 
