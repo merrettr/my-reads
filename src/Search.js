@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Promise from 'bluebird';
+import { uniqBy } from 'lodash';
 import { search } from './BooksAPI';
 import Book from './Book';
 import Loading from './Loading';
@@ -44,7 +45,7 @@ class Search extends Component {
     this.promise = Promise.resolve(search(searchTerm.trim(), 20))
       .then(books =>
         this.setState(prev => ({
-          books: Array.isArray(books) ? books : [],
+          books: Array.isArray(books) ? uniqBy(books, 'id') : [],
           isLoading: false,
         }))
       )
