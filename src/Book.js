@@ -43,7 +43,7 @@ const Book = ({
 
 Book.propTypes = {
   title: PropTypes.string.isRequired,
-  authors: PropTypes.arrayOf(PropTypes.string).isRequired,
+  authors: PropTypes.arrayOf(PropTypes.string),
   shelf: PropTypes.string.isRequired,
   imageLinks: PropTypes.shape({
     smallThumbnail: PropTypes.string.isRequired,
