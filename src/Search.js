@@ -45,7 +45,9 @@ class Search extends Component {
     this.promise = Promise.resolve(search(searchTerm.trim(), 20))
       .then(books =>
         this.setState(prev => ({
-          books: Array.isArray(books) ? uniqBy(books, 'id') : [],
+          books: Array.isArray(books)
+            ? uniqBy(books, 'id').map(book => ({ ...book, shelf: 'none' }))
+            : [],
           isLoading: false,
         }))
       )
