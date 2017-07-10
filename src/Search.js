@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import Promise from 'bluebird';
 import { search } from './BooksAPI';
 import Book from './Book';
 import Loading from './Loading';
+
+// Enable cancellation on promises
+Promise.config({ cancellation: true });
 
 class Search extends Component {
   static propTypes = {
@@ -22,22 +26,29 @@ class Search extends Component {
   };
 
   handleSearch = ev => {
-    this.setState({ search: ev.target.value }, () => {
-      if (this.state.search.trim().length === 0) {
-        return;
-      }
+    const searchTerm = ev.target.value;
 
-      this.setState({ isLoading: true });
+    if (this.promise) {
+      this.promise.cancel();
+    }
 
-      search(this.state.search.trim(), 20)
-        .then(books =>
-          this.setState({
-            books: Array.isArray(books) ? books : [],
-            isLoading: false,
-          })
-        )
-        .catch(() => this.setState({ isLoading: false }));
-    });
+    this.setState({ search: searchTerm });
+
+    if (searchTerm.trim().length === 0) {
+      this.setState({ books: [] });
+      return;
+    }
+
+    this.setState({ isLoading: true });
+
+    this.promise = Promise.resolve(search(searchTerm.trim(), 20))
+      .then(books =>
+        this.setState(prev => ({
+          books: Array.isArray(books) ? books : [],
+          isLoading: false,
+        }))
+      )
+      .catch(() => this.setState({ isLoading: false, books: [] }));
   };
 
   render() {
