@@ -35,7 +35,7 @@ class BooksApp extends React.Component {
 
   addBook = (book, shelf) => {
     this.setState(prev => ({
-      books: [...prev.books, { ...book, shelf }],
+      books: prev.books.map(b => (b.id === book.id ? { ...book, shelf } : b)),
     }));
     update(book, shelf);
   };
@@ -53,7 +53,7 @@ class BooksApp extends React.Component {
           exact
           path="/search"
           render={() =>
-            <Search excludeBooks={this.state.books} onAddBook={this.addBook} />}
+            <Search currentBooks={this.state.books} onAddBook={this.addBook} />}
         />
       </div>
     );

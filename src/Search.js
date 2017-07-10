@@ -7,12 +7,12 @@ import Loading from './Loading';
 
 class Search extends Component {
   static propTypes = {
-    excludeBooks: PropTypes.arrayOf(PropTypes.object),
+    currentBooks: PropTypes.arrayOf(PropTypes.object),
     onAddBook: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    excludeBooks: [],
+    currentBooks: [],
   };
 
   state = {
@@ -29,7 +29,7 @@ class Search extends Component {
 
       this.setState({ isLoading: true });
 
-      search(this.state.search.trim(), 50)
+      search(this.state.search.trim(), 20)
         .then(books =>
           this.setState({
             books: Array.isArray(books) ? books : [],
@@ -41,7 +41,7 @@ class Search extends Component {
   };
 
   render() {
-    const { excludeBooks, onAddBook } = this.props;
+    const { currentBooks, onAddBook } = this.props;
 
     const renderBook = book =>
       <Book
@@ -70,9 +70,10 @@ class Search extends Component {
             ? <Loading />
             : <ol className="books-grid">
                 {this.state.books
-                  .filter(book => {
-                    return !excludeBooks.find(({ id }) => id === book.id);
-                  })
+                  .map(
+                    book =>
+                      currentBooks.find(({ id }) => id === book.id) || book
+                  )
                   .map(renderBook)}
               </ol>}
         </div>
